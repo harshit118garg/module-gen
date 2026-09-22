@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+
 import { Command } from 'commander';
 import chalk from 'chalk';
 import { generateModule } from './generate.js';
@@ -9,8 +9,8 @@ program.name('gen').description('Module generator').version('2.0.0');
 program
   .command('module')
   .argument('<name>', 'Module name, e.g. User or user-profile')
-  .option('-b, --blueprint <name>', 'Blueprint to use', 'basic')
   .option('-o, --output <dir>', 'Output directory', 'src/modules')
+  .option('-b, --blueprint <name>', 'Blueprint to use', 'module')
   .option('-f, --force', 'Overwrite if it already exists')
   .action(async (name, options) => {
     try {

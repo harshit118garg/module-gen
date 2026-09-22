@@ -1,0 +1,15 @@
+// Business logic / state orchestration for the module — the component stays dumb.
+import { useState, useEffect } from 'react';
+import { <%= camelName %>Api } from '../api/<%= name %>.api';
+import type { <%= camelName %>Model } from '../models/<%= name %>.model';
+import type { <%= camelName %>Props } from '../components/<%= name %>.types';
+
+export function use<%= camelName %>Controller(_props: <%= camelName %>Props) {
+  const [state, setState] = useState<<%= camelName %>Model[]>([]);
+
+  useEffect(() => {
+    <%= camelName %>Api.fetchAll().then(setState);
+  }, []);
+
+  return { state };
+}

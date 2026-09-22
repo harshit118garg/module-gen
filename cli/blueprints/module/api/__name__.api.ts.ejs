@@ -1,0 +1,9 @@
+// All network calls for this module live here — nowhere else imports fetch/axios directly.
+import type { <%= camelName %>Model } from '../models/<%= name %>.model';
+
+export const <%= camelName %>Api = {
+  async fetchAll(): Promise<<%= camelName %>Model[]> {
+    const res = await fetch('/api/<%= camelName %>');
+    return res.json();
+  },
+};

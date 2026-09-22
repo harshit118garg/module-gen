@@ -1,0 +1,15 @@
+import React from 'react';
+import type { <%= camelName %>Props } from '../definations/<%= name %>.types';
+import { use<%= camelName %>Controller } from '../controllers/<%= name %>.controller';
+
+export const <%= camelName %>: React.FC<<%= camelName %>Props> = (props) => {
+  const { state } = use<%= camelName %>Controller(props);
+
+  return (
+    <div className="<%= camelName %>Container">
+      {/* render state */}
+    </div>
+  );
+};
+
+export default <%= camelName %>;
