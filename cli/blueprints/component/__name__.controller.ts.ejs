@@ -1,0 +1,9 @@
+// Business logic / state orchestration for the module — the component stays dumb.
+import { useState } from 'react';
+import type { <%= pascalName %>Model } from './<%= name %>.model';
+import type { <%= pascalName %>Props } from './<%= name %>.types';
+
+export function use<%= pascalName %>Controller(_props: <%= pascalName %>Props) {
+  const [state, setState] = useState<<%= pascalName %>Model[]>([]);
+  return { state };
+}
