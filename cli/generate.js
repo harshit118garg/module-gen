@@ -11,6 +11,11 @@ const toCamelCase = (str) =>
     .replace(/[-_](.)/g, (_, c) => c.toUpperCase())
     .replace(/^(.)/, (_, c) => c.toLowerCase());
 
+const toPascalCase = (str) =>
+  str
+    .replace(/[-_\s]+(.)/g, (_, c) => c.toUpperCase())
+    .replace(/^(.)/, (_, c) => c.toUpperCase());
+
 export async function generateModule(name, { output, blueprint, force }) {
   const blueprintDir = path.join(__dirname, "blueprints", blueprint);
 
@@ -24,6 +29,7 @@ export async function generateModule(name, { output, blueprint, force }) {
   }
 
   const camelName = toCamelCase(name);
+  const pascalName = toPascalCase(name);
   const targetDir = path.resolve(process.cwd(), output, camelName);
 
   if ((await fs.pathExists(targetDir)) && !force) {
@@ -34,8 +40,9 @@ export async function generateModule(name, { output, blueprint, force }) {
   await fs.ensureDir(targetDir);
 
   const data = {
-    name: camelName,
+    name: pascalName,
     camelName,
+    pascalName
   };
 
   // Recursively list every template file, preserving sub-folders.
@@ -51,7 +58,7 @@ export async function generateModule(name, { output, blueprint, force }) {
     const relDir = path.relative(blueprintDir, entry.parentPath ?? entry.path);
     const outputFileName = entry.name
       .replace(/\.ejs$/, "")
-      .replace(/__name__/g, camelName);
+      .replace(/__name__/g, pascalName);
     const outputPath = path.join(targetDir, relDir, outputFileName);
 
     await fs.ensureDir(path.dirname(outputPath));
