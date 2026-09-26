@@ -8,10 +8,12 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "cli-generate": "node ./cli/index.js"
+    "gen": "node ./cli/index.js",
+    "gen:module": "node ./cli/index.js module -o src/modules",
+    "gen:component": "node ./cli/index.js component -o src/components"
   },
   "bin": {
-    "cli-generate": "./cli/index.js"
+    "gen": "./cli/index.js"
   },
   "dependencies": {
     "react": "^19.2.8",
