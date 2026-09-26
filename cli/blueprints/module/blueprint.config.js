@@ -1,6 +1,10 @@
 // cli/blueprints/module/blueprint.config.js
 export default {
   defaultOutput: "src/modules",
+  
+  description:
+    "Builds a full feature module: api, component, controller, model, " +
+    "definitions, utils, and a barrel index.",
 
   files: [
     { template: "index.ts.ejs",                            to: "index.ts",                            tags: ["index"] },

@@ -1,18 +1,26 @@
 // cli/blueprints/component/blueprint.config.js
 export default {
   defaultOutput: "src/components",
+  description:
+    "A single UI component with its controller, model, and types.",
   layouts: {
     flat: {
-      "__name__.tsx.ejs":           "__name__.tsx",
-      "__name__.controller.ts.ejs": "__name__.controller.ts",
-      "__name__.model.ts.ejs":      "__name__.model.ts",
-      "__name__.types.ts.ejs":      "__name__.types.ts",
+      description: "Standalone component in its own folder.",
+      fileMap: {
+        "__name__.tsx.ejs":           "__name__.tsx",
+        "__name__.controller.ts.ejs": "__name__.controller.ts",
+        "__name__.model.ts.ejs":      "__name__.model.ts",
+        "__name__.types.ts.ejs":      "__name__.types.ts",
+      }
     },
     module: {
-      "__name__.tsx.ejs":           "components/__name__.tsx",
-      "__name__.controller.ts.ejs": "controllers/__name__.controller.ts",
-      "__name__.model.ts.ejs":      "models/__name__.model.ts",
-      "__name__.types.ts.ejs":      "definations/__name__.types.ts",
+      description: "Component living inside an existing module's subfolders.",
+      fileMap: {
+        "__name__.tsx.ejs":           "components/__name__.tsx",
+        "__name__.controller.ts.ejs": "controllers/__name__.controller.ts",
+        "__name__.model.ts.ejs":      "models/__name__.model.ts",
+        "__name__.types.ts.ejs":      "definations/__name__.types.ts",
+      }
     },
   },
   patches: [

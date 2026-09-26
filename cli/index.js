@@ -6,6 +6,7 @@ import { renameGenerated } from "./rename.js"; // ← NEW
 import path from "path";
 import fs from "fs-extra";
 import { fileURLToPath } from "url";
+import { listBlueprints } from "./list.js";
 
 const program = new Command();
 program.name("gen").description("Module generator").version("2.0.0");
@@ -84,6 +85,20 @@ program
       await renameGenerated(oldName, newName, options);
     } catch (err) {
       console.error(chalk.red("Rename failed"), err);
+      process.exit(1);
+    }
+  });
+
+program
+  .command("list-blueprints")
+  .alias("ls")
+  .description("Show all blueprints and their descriptions")
+  .argument("[name]", "Show details for one blueprint")
+  .action(async (name) => {
+    try {
+      await listBlueprints(blueprintsDir, name);
+    } catch (err) {
+      console.error(chalk.red("list-blueprints failed"), err);
       process.exit(1);
     }
   });

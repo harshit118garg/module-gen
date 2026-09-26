@@ -115,7 +115,7 @@ export async function generateModule(name, options) {
     );
     process.exit(1);
   }
-  const layout = cfg.layouts?.[layoutName];
+  const layout = cfg.layouts?.[layoutName]?.fileMap;
   const isModuleLayout = layoutName === "module";
   const targetDir = isModuleLayout
     ? outputBase
