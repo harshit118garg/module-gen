@@ -6,7 +6,11 @@ import type { <%= pascalName %>Props } from './<%= pascalName %>.types';
 import { use<%= pascalName %>Controller } from './<%= pascalName %>.controller';
 <% } -%>
 
+<% if (has('types')) { -%>
 export const <%= pascalName %>: React.FC<<%= pascalName %>Props> = (props) => {
+<% } else { -%>
+export const <%= pascalName %>: React.FC<Record<string, unknown>> = (props) => {
+<% } -%>
 <% if (has('controller')) { -%>
   const { state } = use<%= pascalName %>Controller(props);
 <% } else { -%>
