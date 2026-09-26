@@ -1,9 +1,21 @@
 // Business logic / state orchestration for the module — the component stays dumb.
 import { useState } from 'react';
+<% if (has('model')) { -%>
 import type { <%= pascalName %>Model } from './<%= name %>.model';
+<% } -%>
+<% if (has('types')) { -%>
 import type { <%= pascalName %>Props } from './<%= name %>.types';
+<% } -%>
 
+<% if (has('types')) { -%>
 export function use<%= pascalName %>Controller(_props: <%= pascalName %>Props) {
+<% } else { -%>
+export function use<%= pascalName %>Controller(_props: Record<string, unknown>) {
+<% } -%>
+<% if (has('model')) { -%>
   const [state, setState] = useState<<%= pascalName %>Model[]>([]);
+<% } else { -%>
+  const [state, setState] = useState<unknown[]>([]);
+<% } -%>
   return { state };
 }

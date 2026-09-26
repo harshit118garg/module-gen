@@ -1,8 +1,16 @@
+// cli/blueprints/module/api/__name__.api.ts.ejs
+
 // All network calls for this module live here — nowhere else imports fetch/axios directly.
+<% if (has('model')) { -%>
 import type { <%= pascalName %>Model } from '../models/<%= name %>.model';
+<% } -%>
 
 export const <%= pascalName %>Api = {
+<% if (has('model')) { -%>
   async fetchAll(): Promise<<%= pascalName %>Model[]> {
+<% } else { -%>
+  async fetchAll(): Promise<unknown[]> {
+<% } -%>
     const res = await fetch('/api/<%= pascalName %>');
     return res.json();
   },

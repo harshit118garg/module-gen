@@ -1,9 +1,17 @@
 import React from 'react';
-import type { <%= pascalName %>Props } from './<%= name %>.types';
-import { use<%= pascalName %>Controller } from './<%= name %>.controller';
+<% if (has('types')) { -%>
+import type { <%= pascalName %>Props } from './<%= pascalName %>.types';
+<% } -%>
+<% if (has('controller')) { -%>
+import { use<%= pascalName %>Controller } from './<%= pascalName %>.controller';
+<% } -%>
 
 export const <%= pascalName %>: React.FC<<%= pascalName %>Props> = (props) => {
+<% if (has('controller')) { -%>
   const { state } = use<%= pascalName %>Controller(props);
+<% } else { -%>
+  // no controller generated
+<% } -%>
 
   return (
     <div className="<%= pascalName %>Container">

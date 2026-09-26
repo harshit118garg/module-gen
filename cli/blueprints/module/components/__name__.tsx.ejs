@@ -1,9 +1,23 @@
-import React from 'react';
-import type { <%= pascalName %>Props } from '../definations/<%= name %>.types';
-import { use<%= pascalName %>Controller } from '../controllers/<%= name %>.controller';
+// cli/blueprints/module/components/__name__.tsx.ejs
 
+import React from 'react';
+<% if (has('types')) { -%>
+import type { <%= pascalName %>Props } from '../definations/<%= name %>.types';
+<% } -%>
+<% if (has('controller')) { -%>
+import { use<%= pascalName %>Controller } from '../controllers/<%= name %>.controller';
+<% } -%>
+
+<% if (has('types')) { -%>
 export const <%= pascalName %>: React.FC<<%= pascalName %>Props> = (props) => {
+<% } else { -%>
+export const <%= pascalName %>: React.FC<Record<string, unknown>> = (props) => {
+<% } -%>
+<% if (has('controller')) { -%>
   const { state } = use<%= pascalName %>Controller(props);
+<% } else { -%>
+  // no controller generated
+<% } -%>
 
   return (
     <div className="<%= pascalName %>Container">

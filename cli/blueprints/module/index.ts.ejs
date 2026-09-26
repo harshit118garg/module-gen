@@ -1,3 +1,11 @@
+// cli/blueprints/module/index.ts.ejs
+
+<% if (has('ui')) { -%>
 export * from './components/<%= name %>';
+<% } -%>
+<% if (has('types')) { -%>
 export * from './definations/<%= name %>.types';
+<% } -%>
+<% if (has('model')) { -%>
 export * from './models/<%= name %>.model';
+<% } -%>

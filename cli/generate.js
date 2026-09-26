@@ -59,8 +59,8 @@ export async function generateModule(name, options) {
     process.exit(1);
   }
 
-  const camelName = toCamelCase(name);   // folder name + EJS data
-  const pascalName = toPascalCase(name); // file name + EJS data
+  const camelName = toCamelCase(name);
+  const pascalName = toPascalCase(name);
   const targetDir = path.resolve(process.cwd(), output, camelName);
 
   if ((await fs.pathExists(targetDir)) && !force) {
@@ -70,39 +70,53 @@ export async function generateModule(name, options) {
   }
   if (!dryRun) await fs.ensureDir(targetDir);
 
-  const data = { name: pascalName, camelName, pascalName };
-  const cfg = await loadBlueprint(blueprintDir, data);
+  const cfg = await loadBlueprint(blueprintDir, { camelName, pascalName });
 
   const onlySet = new Set((only ?? "").split(",").map((s) => s.trim()).filter(Boolean));
   const skipSet = new Set((skip ?? "").split(",").map((s) => s.trim()).filter(Boolean));
 
-  const matchesFilter = (entry) => {
-    const keys = [...(entry.tags ?? []), entry.to];
-    if (onlySet.size && !keys.some((k) => onlySet.has(k))) return false;
-    if (skipSet.size && keys.some((k) => skipSet.has(k))) return false;
-    return true;
-  };
-
-  const written = [];
-  const skipped = [];
+  // --- NEW: resolve which entries will actually be written ---
+  const planned = []; // { entry, destRel, outputPath }
+  const skipped = []; // strings for the report
 
   for (const entry of cfg.files ?? []) {
     if (typeof entry.when === "function") {
-      const ok = await entry.when({ flags, name: camelName, data });
+      const ok = await entry.when({ flags, name: camelName, data: { camelName, pascalName } });
       if (!ok) { skipped.push(entry.to ?? entry.template); continue; }
     }
-    if (!matchesFilter(entry)) { skipped.push(entry.to ?? entry.template); continue; }
 
+    const keys = [...(entry.tags ?? []), entry.to];
+    if (onlySet.size && !keys.some((k) => onlySet.has(k))) {
+      skipped.push(entry.to ?? entry.template); continue;
+    }
+    if (skipSet.size && keys.some((k) => skipSet.has(k))) {
+      skipped.push(entry.to ?? entry.template); continue;
+    }
+
+    const destRel = applyNameTokens(entry.to ?? entry.template.replace(/\.ejs$/, ""), {
+      camelName, pascalName,
+    });
+
+    planned.push({ entry, destRel });
+  }
+
+  // --- NEW: build a lookup the templates can query ---
+  const plannedFiles = new Set(planned.map((p) => p.destRel));
+  const plannedTags  = new Set(planned.flatMap((p) => p.entry.tags ?? []));
+
+  const has = (key) => plannedFiles.has(key) || plannedTags.has(key);
+
+  const data = { name: pascalName, camelName, pascalName, has, files: [...plannedFiles] };
+
+  const written = [];
+
+  for (const { entry, destRel } of planned) {
     const sourcePath = path.join(blueprintDir, entry.template);
     if (!(await fs.pathExists(sourcePath))) {
       console.warn(chalk.yellow(`  ⚠ missing template: ${entry.template}`));
       continue;
     }
 
-    const destRel = applyNameTokens(
-      entry.to ?? entry.template.replace(/\.ejs$/, ""),
-      data,
-    );
     const outputPath = destRel.startsWith("/")
       ? path.resolve(process.cwd(), destRel.slice(1))
       : path.join(targetDir, destRel);
