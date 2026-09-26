@@ -61,6 +61,7 @@ for (const bp of blueprints) {
       "Force a layout (flat | module). Auto-detected by default.",
     )
     .option("--dry-run", "Print the plan without writing files")
+    .option("--no-patch", "Skip barrel/patch updates (generate files only)")  // ← NEW
     .action(runGenerate(bp));
 }
 

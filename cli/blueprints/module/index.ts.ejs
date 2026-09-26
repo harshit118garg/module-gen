@@ -1,5 +1,3 @@
-// cli/blueprints/module/index.ts.ejs
-
 <% if (has('ui')) { -%>
 export * from './components/<%= name %>';
 <% } -%>
@@ -9,3 +7,6 @@ export * from './definations/<%= name %>.types';
 <% if (has('model')) { -%>
 export * from './models/<%= name %>.model';
 <% } -%>
+
+// gen:exports
+// /gen:exports

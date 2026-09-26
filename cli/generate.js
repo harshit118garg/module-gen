@@ -4,6 +4,7 @@ import path from "path";
 import ejs from "ejs";
 import chalk from "chalk";
 import { fileURLToPath, pathToFileURL } from "url";
+import { applyPatches } from "./patch.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -82,6 +83,7 @@ export async function generateModule(name, options) {
     skip,
     dryRun,
     layout: layoutOpt,
+    patch: patchOpt = true,
     ...flags
   } = options;
 
@@ -118,19 +120,6 @@ export async function generateModule(name, options) {
   const targetDir = isModuleLayout
     ? outputBase
     : path.join(outputBase, camelName);
-
-  // --- NEW: layout validation ---
-  if (cfg.layouts && !cfg.layouts[layoutName]) {
-    console.error(
-      chalk.red(
-        `✖ Unknown layout "${layoutName}" for blueprint "${blueprint}"`,
-      ),
-    );
-    console.log(
-      chalk.gray(`  Available: ${Object.keys(cfg.layouts).join(", ")}`),
-    );
-    process.exit(1);
-  }
 
   if ((await fs.pathExists(targetDir)) && !force && !isModuleLayout) {
     console.error(chalk.red(`✖ Directory already exists: ${targetDir}`));
@@ -238,6 +227,43 @@ export async function generateModule(name, options) {
 
   if (skipped.length) {
     console.log(chalk.gray(`  ↷ skipped: ${skipped.join(", ")}`));
+  }
+
+  if (patchOpt) {
+    const patchResults = await applyPatches({
+      targetDir,
+      patches: cfg.patches,
+      data,
+      has,
+      layout: layoutName,
+      dryRun,
+      flags,
+    });
+
+    for (const r of patchResults) {
+      const rel = r.filePath ? path.relative(process.cwd(), r.filePath) : "?";
+
+      switch (r.status) {
+        case "patched":
+          console.log(chalk.green(`  ✎ patched ${rel}`));
+          break;
+        case "created":
+          console.log(chalk.green(`  ✎ created ${rel}`));
+          break;
+        case "already-present":
+        case "skipped:when":
+        case "skipped:guard":
+        case "empty":
+          break; // silent — expected on repeat runs or filtered files
+        case "malformed-markers":
+          console.warn(
+            chalk.yellow(`  ⚠ malformed markers in ${rel}; skipped`),
+          );
+          break;
+        default:
+          console.log(chalk.yellow(`  ⚠ patch ${r.status} ${rel}`));
+      }
+    }
   }
 
   const verb = dryRun ? "planned" : "generated";
