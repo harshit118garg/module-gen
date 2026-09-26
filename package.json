@@ -10,7 +10,9 @@
     "preview": "vite preview",
     "cli-generate": "node ./cli/index.js"
   },
-  "bin": { "cli-generate": "./cli/index.js" },
+  "bin": {
+    "cli-generate": "./cli/index.js"
+  },
   "dependencies": {
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
@@ -29,6 +31,7 @@
     "eslint-plugin-react-refresh": "^0.5.6",
     "fs-extra": "^11.4.0",
     "globals": "^17.12.0",
+    "prompts": "^2.4.2",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.69.0",
     "vite": "^8.3.0"
