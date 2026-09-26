@@ -1,7 +1,7 @@
 # CLI Code Generator for React + TypeScript (Vite)
 
 A CLI that scaffolds module boilerplate — from a bare component to a full
-`api/controllers/models/utils/definitions/components` module — from a single
+`api/controllers/models/utils/definations/components` module — from a single
 `npm run gen` command, using swappable **blueprints** so simple cases stay
 simple and complex ones stay consistent.
 
@@ -36,7 +36,7 @@ know or care what's inside a blueprint — it walks whatever folder you point it
 at, preserves the sub-folder structure, and renders each file. So:
 
 - `basic` → 4 files, flat, for a plain UI component.
-- `full` → component + api + controllers + models + utils + definitions, for a
+- `full` → component + api + controllers + models + utils + definations, for a
   real module.
 - Uniformity is automatic: every module built from `full` has the identical
   shape, because they all came from the same folder.
@@ -85,13 +85,13 @@ my-app/
 │           │   └── __name__.model.ts.ejs
 │           ├── utils/
 │           │   └── __name__.utils.ts.ejs
-│           ├── definitions/
-│           │   └── __name__.definitions.ts.ejs
+│           ├── definations/
+│           │   └── __name__.definations.ts.ejs
 │           └── index.ts.ejs
 ```
 
 ```bash
-mkdir -p cli/blueprints/basic cli/blueprints/full/{components,api,controllers,models,utils,definitions}
+mkdir -p cli/blueprints/basic cli/blueprints/full/{components,api,controllers,models,utils,definations}
 ```
 
 Every file that should be renamed per-module keeps the `__name__` placeholder,
@@ -233,7 +233,7 @@ export function format<%= pascalName %>Label(id: string): string {
 }
 ```
 
-**`cli/blueprints/full/definitions/__name__.definitions.ts.ejs`**
+**`cli/blueprints/full/definations/__name__.definations.ts.ejs`**
 ```ts
 // Constants / enums for this module — route paths, query keys, feature-flag names, etc.
 export const <%= constantName %>_QUERY_KEY = '<%= kebabName %>';
@@ -383,7 +383,7 @@ chmod +x cli/index.js
 # Simple component — blueprint defaults to "basic"
 npm run gen module Avatar
 
-# Full module with api/controllers/models/utils/definitions
+# Full module with api/controllers/models/utils/definations
 npm run gen module UserProfile -- --blueprint full
 
 # Custom output dir + overwrite
@@ -410,7 +410,7 @@ src/modules/user-profile/
 ├── controllers/user-profile.controller.ts
 ├── models/user-profile.model.ts
 ├── utils/user-profile.utils.ts
-├── definitions/user-profile.definitions.ts
+├── definations/user-profile.definations.ts
 └── index.ts
 ```
 

@@ -1,15 +1,15 @@
 import React from 'react';
 <% if (has('types')) { -%>
-import type { <%= pascalName %>Props } from './<%= pascalName %>.types';
+import type { <%= pascalName %>Props } from '<%= layout === 'module' ? '../definations/' : './' %><%= name %>.types';
 <% } -%>
 <% if (has('controller')) { -%>
-import { use<%= pascalName %>Controller } from './<%= pascalName %>.controller';
+import { use<%= pascalName %>Controller } from '<%= layout === 'module' ? '../controllers/' : './' %><%= name %>.controller';
 <% } -%>
 
 <% if (has('types')) { -%>
 export const <%= pascalName %>: React.FC<<%= pascalName %>Props> = (props) => {
 <% } else { -%>
-export const <%= pascalName %>: React.FC<Record<string, unknown>> = (props) => {
+export const <%= pascalName %>: React.FC<Record<string, unknown>> = (_props) => {
 <% } -%>
 <% if (has('controller')) { -%>
   const { state } = use<%= pascalName %>Controller(props);

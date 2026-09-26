@@ -40,6 +40,7 @@ for (const bp of blueprints) {
     .option("-f, --force", "Overwrite if it already exists")
     .option("--only <list>", "Comma-separated tags/files to include")
     .option("--skip <list>", "Comma-separated tags/files to exclude")
+    .option("--layout <name>", "Force a layout (flat | module). Auto-detected by default.")
     .option("--dry-run", "Print the plan without writing files")
     .action(runGenerate(bp));
 }

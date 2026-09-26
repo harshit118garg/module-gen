@@ -1,4 +1,8 @@
 // Shape of the domain data — the single source of truth other files import from.
+<% if (has('types')) { -%>
+import type { <%= pascalName %>Props } from '<%= layout === 'module' ? '../definations/' : './' %><%= name %>.types';
+<% } -%>
+
 export interface <%= pascalName %>Model {
   id: string;
 }
